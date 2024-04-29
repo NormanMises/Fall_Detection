@@ -8,7 +8,9 @@ import platform
 import subprocess
 import time
 import urllib
+import pathlib
 from pathlib import Path
+pathlib.PosixPath = pathlib.WindowsPath
 from zipfile import ZipFile
 
 import requests

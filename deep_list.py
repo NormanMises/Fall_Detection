@@ -310,7 +310,7 @@ def detect(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
 
         kpi1_text.write(str(fps_)+' FPS')
         if fps_ < fps_drop_warn_thresh:
-            fps_warn.warning(f"FPS dropped below {fps_drop_warn_thresh}")
+            fps_warn.warning(f"帧率下降低于 {fps_drop_warn_thresh}")
         kpi2_text.write(mapped_)
         kpi3_text.write(global_graph_dict)
 

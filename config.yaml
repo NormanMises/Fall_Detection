@@ -1,0 +1,39 @@
+cookie:
+  expiry_days: 30
+  key: aljferovrwbvrbt./r,b/ea,gbvte,hbr.
+  name: refresh_token
+credentials:
+  usernames:
+    asdfsaf:
+      email: asfdaf@gmail.com
+      failed_login_attempts: 0
+      logged_in: false
+      name: afsadf
+      password: $2b$12$8.IHwRqDYPjlVoEhaq/.HOG0p519GuGU.oMCN54HygtAhkN7kI50W
+    tyt:
+      email: tyt@gmail.com
+      failed_login_attempts: 0
+      logged_in: false
+      name: tyt
+      password: $2b$12$5wV/P3HHuMsyj99.BYL57eG6sLp2glq9Do704ls9QUk3pw/ta2Q/i
+    wlf:
+      email: wlf@gmail.com
+      failed_login_attempts: 0
+      logged_in: true
+      name: wlf
+      password: $2b$12$zHBaNF7.5wxkp0zZwYzlYeqHk9Gfi3zIZoxFg7YecUkmVUxB5WuEC
+    yhf:
+      email: yhf@gmail.com
+      failed_login_attempts: 0
+      logged_in: false
+      name: yhf
+      password: $2b$12$qC2WbW28vgAbf1mp2gotVOQ4GCZPWWu5Qbm0TH7u0X1thZ7wb0rOa
+    yhf1:
+      email: yhf1@gmail.com
+      failed_login_attempts: 0
+      logged_in: false
+      name: yhf1
+      password: $2b$12$JtgX9x7H0f9GkW67hflBHeFgdXly/gdq0nbIX4Cs7Z7uphIrJ0ROm
+pre-authorized:
+  emails:
+  - melsby@gmail.com

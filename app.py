@@ -1,7 +1,9 @@
+# streamlit run app.py
+
 import streamlit as st
 st.title("人体跌倒检测系统")
 
-video_file = open('video/Ways to Fall.mp4', 'rb')
+video_file = open('video/detect.mp4', 'rb')
 video_bytes = video_file.read()
 
 st.video(video_bytes, loop=True)

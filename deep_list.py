@@ -46,9 +46,9 @@ def get_gpu_memory():
     return gpu_memory[0]
 
 @torch.no_grad()
-def detect(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
+def detect(weights=ROOT / 'pt/fall_mobilenetv3.pt',  # model.pt path(s)
         source=ROOT / 'yolov5/data/images',  # file/dir/URL/glob, 0 for webcam
-        data=ROOT / 'yolov5/data/coco128.yaml',  # dataset.yaml path
+        data=ROOT / 'yolov5/data/fall.yaml',  # dataset.yaml path
         stframe=None,
         #stgraph=None,
         kpi1_text="",

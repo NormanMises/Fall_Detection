@@ -4,36 +4,28 @@ cookie:
   name: refresh_token
 credentials:
   usernames:
-    asdfsaf:
-      email: asfdaf@gmail.com
+    admin:
+      email: admin@gmail.com
       failed_login_attempts: 0
       logged_in: false
-      name: afsadf
-      password: $2b$12$8.IHwRqDYPjlVoEhaq/.HOG0p519GuGU.oMCN54HygtAhkN7kI50W
-    tyt:
-      email: tyt@gmail.com
-      failed_login_attempts: 0
-      logged_in: false
-      name: tyt
-      password: $2b$12$5wV/P3HHuMsyj99.BYL57eG6sLp2glq9Do704ls9QUk3pw/ta2Q/i
-    wlf:
-      email: wlf@gmail.com
-      failed_login_attempts: 0
-      logged_in: true
-      name: wlf
-      password: $2b$12$zHBaNF7.5wxkp0zZwYzlYeqHk9Gfi3zIZoxFg7YecUkmVUxB5WuEC
+      name: admin
+      password: $2b$12$gI9tKEbYNKkE9arT96fGsuInELrhUG872yXZg1AskpeELoW25xQNy
     yhf:
-      email: yhf@gmail.com
+      email: normanmises@gmail.com
       failed_login_attempts: 0
       logged_in: false
       name: yhf
-      password: $2b$12$qC2WbW28vgAbf1mp2gotVOQ4GCZPWWu5Qbm0TH7u0X1thZ7wb0rOa
-    yhf1:
-      email: yhf1@gmail.com
+      password: $2b$12$eUov136U7vD.MZ7.LEKQNOTS4ihWG0hfLoCcC6/HC31Lrm/7L97oW
+    yhf123:
+      email: yhf123@gmail.com
       failed_login_attempts: 0
       logged_in: false
-      name: yhf1
-      password: $2b$12$JtgX9x7H0f9GkW67hflBHeFgdXly/gdq0nbIX4Cs7Z7uphIrJ0ROm
+      name: yhfyhf
+      password: $2b$12$eKgr3rIb3UjTokabAi3pouTqVKvkQEYCCdQRyivkDetJXKi5Xeopu
+    yhfyhfyhf:
+      email: yhf@gmail.com
+      logged_in: false
+      name: yhfyhfyhf
+      password: $2b$12$LgC3CelG9zsuiMKTpvwTluhe/ugDV61s6d2i4kageGdNLhmeBpCtu
 pre-authorized:
-  emails:
-  - melsby@gmail.com
+  emails: null

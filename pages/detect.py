@@ -26,6 +26,7 @@ elif st.session_state["authentication_status"] is None:
     st.switch_page("app.py")
 
 st.title("跌倒检测系统")
+st.write(f'{st.session_state["name"]}，欢迎回来！')
 inference_msg = st.empty()
 
 st.sidebar.title("配置")

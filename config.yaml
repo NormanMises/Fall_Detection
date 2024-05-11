@@ -22,8 +22,14 @@ credentials:
       logged_in: false
       name: yhfyhf
       password: $2b$12$eKgr3rIb3UjTokabAi3pouTqVKvkQEYCCdQRyivkDetJXKi5Xeopu
+    yhf233:
+      email: yhf233@gmail.com
+      logged_in: false
+      name: yhfyhf
+      password: $2b$12$BTVTWtOtxqlxbA83F5hWE.uj0lqwH5bb0z.Ezd23Prg2uLOZYM9Ki
     yhfyhfyhf:
       email: yhf@gmail.com
+      failed_login_attempts: 0
       logged_in: false
       name: yhfyhfyhf
       password: $2b$12$LgC3CelG9zsuiMKTpvwTluhe/ugDV61s6d2i4kageGdNLhmeBpCtu

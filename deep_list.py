@@ -29,6 +29,7 @@ from collections import Counter
 
 import psutil
 import subprocess
+from icecream import ic
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
@@ -48,22 +49,25 @@ def get_gpu_memory():
 @torch.no_grad()
 def detect(weights=ROOT / 'pt/fall_mobilenetv3.pt',  # model.pt path(s)
         source=ROOT / 'yolov5/data/images',  # file/dir/URL/glob, 0 for webcam
-        data=ROOT / 'yolov5/data/fall.yaml',  # dataset.yaml path
         stframe=None,
         #stgraph=None,
-        kpi1_text="",
-        kpi2_text="", kpi3_text="",
-        js1_text="",js2_text="",js3_text="",
+        kpi1_text="", kpi2_text="", kpi3_text="", fps_warn="",
+        js1_text="", js2_text="", js3_text="",
+        inf_ov_1_text="", inf_ov_2_text="", inf_ov_3_text="", inf_ov_4_text="",
+        conf_thres=0.25, iou_thres=0.45,
+        conf_thres_drift=0.75, fps_drop_warn_thresh=8,  
+        nosave=False,  # do not save images/videos
+        display_labels=False,
+        save_poor_frame__ = False,
+
+        data=ROOT / 'yolov5/data/fall.yaml',  # dataset.yaml path
         imgsz=(640, 640),  # inference size (height, width)
-        conf_thres=0.25,  # confidence threshold
-        iou_thres=0.45,  # NMS IOU threshold
         max_det=1000,  # maximum detections per image
         device='',  # cuda device, i.e. 0 or 0,1,2,3 or cpu
         view_img=False,  # show results
         save_txt=False,  # save results to *.txt
         save_conf=False,  # save confidences in --save-txt labels
         save_crop=False,  # save cropped prediction boxes
-        nosave=False,  # do not save images/videos
         classes=None,  # filter by class: --class 0, or --class 0 2 3
         agnostic_nms=False,  # class-agnostic NMS
         augment=False,  # augmented inference
@@ -77,12 +81,7 @@ def detect(weights=ROOT / 'pt/fall_mobilenetv3.pt',  # model.pt path(s)
         hide_conf=False,  # hide confidences
         half=False,  # use FP16 half-precision inference
         dnn=False,
-        display_labels=False,
         config_deepsort="deep_sort_pytorch/configs/deep_sort.yaml", #Deep Sort configuration
-        conf_thres_drift = 0.75,
-        save_poor_frame__ = False,
-        inf_ov_1_text="", inf_ov_2_text="",inf_ov_3_text="", inf_ov_4_text="",
-        fps_warn="",fps_drop_warn_thresh=8  
         ):
     save_img = not nosave and not source.endswith('.txt')  # save inference images
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
@@ -91,6 +90,10 @@ def detect(weights=ROOT / 'pt/fall_mobilenetv3.pt',  # model.pt path(s)
     ## initialize deepsort
     cfg = get_config()
     cfg.merge_from_file(config_deepsort)
+    
+    # deepsort的作用是对检测到的目标进行跟踪和识别
+    # 它可以根据目标的运动轨迹和外观特征，对目标进行唯一标识
+    # 并且可以在目标丢失或重新出现时，对目标进行重新识别
     deepsort = DeepSort(cfg.DEEPSORT.REID_CKPT,
                         max_dist=cfg.DEEPSORT.MAX_DIST, min_confidence=cfg.DEEPSORT.MIN_CONFIDENCE,
                         nms_max_overlap=cfg.DEEPSORT.NMS_MAX_OVERLAP, max_iou_distance=cfg.DEEPSORT.MAX_IOU_DISTANCE,
@@ -129,6 +132,8 @@ def detect(weights=ROOT / 'pt/fall_mobilenetv3.pt',  # model.pt path(s)
         modelc = load_classifier(name='resnet101', n=2)  # initialize
         modelc.load_state_dict(torch.load('weights/resnet101.pt', map_location=device)['model']).to(device).eval()
 
+
+#######################################################################################################
     # Dataloader
     if webcam:
         #view_img = check_imshow()
@@ -253,24 +258,33 @@ def detect(weights=ROOT / 'pt/fall_mobilenetv3.pt',  # model.pt path(s)
                             f.write(('%g ' * 10 + '\n') % (frame_idx, identity, bbox_left,
                                                            bbox_top, bbox_w, bbox_h, -1, -1, -1, -1))  # label format
 
-                # Write results Label
+                
                 for *xyxy, conf, cls in reversed(det):
-                    if save_txt:  # Write to file
-                        xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
-                        line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
+                    # 如果需要保存文本
+                    if save_txt:  
+                        # 将xyxy转换为xywh格式
+                        xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  
+                        # 如果需要保存置信度，将置信度添加到line中
+                        line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  
+                        # 将line写入txt文件
                         with open(txt_path + '.txt', 'a') as f:
                             f.write(('%g ' * len(line)).rstrip() % line + '\n')
 
-                    if save_img or save_crop or view_img or display_labels:  # Add bbox to image
-                        c = int(cls)  # integer class
+                    # 如果需要保存图片、裁剪、查看图片或显示标签
+                    if save_img or save_crop or view_img or display_labels:  
+                        # 将cls转换为整数
+                        c = int(cls)  
+                        # 如果需要隐藏标签，label为None；否则，如果需要隐藏置信度，label为类名；否则，label为类名和置信度
                         label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
+                        # 在图片上绘制一个框
                         plot_one_box(xyxy, im0, label=label, color=colors(c, True), line_thickness=line_thickness)
+                        # 如果需要保存裁剪的图片
                         if save_crop:
+                            # 将框内的内容保存为图片
                             save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
             
             else:
                 deepsort.increment_ages()
-                
             # Stream results
             if view_img:
                 cv2.imshow(str(p), im0)
@@ -311,16 +325,17 @@ def detect(weights=ROOT / 'pt/fall_mobilenetv3.pt',  # model.pt path(s)
         kpi1_text.write(str(fps_)+' FPS')
         if fps_ < fps_drop_warn_thresh:
             fps_warn.warning(f"帧率下降低于 {fps_drop_warn_thresh}")
-        kpi2_text.write(mapped_)
-        kpi3_text.write(global_graph_dict)
+        
+        
+        if mapped_:
+            kpi2_text.write(mapped_['fall'])
+            kpi3_text.write(global_graph_dict.get('fall', 0))
 
-        inf_ov_1_text.write(test_drift)
-        inf_ov_2_text.write(poor_perf_frame_counter)
 
-        if fps_<min_FPS:
+        if fps_< min_FPS:
             inf_ov_3_text.write(fps_)
             min_FPS = fps_
-        if fps_>max_FPS:
+        if fps_> max_FPS:
             inf_ov_4_text.write(fps_)
             max_FPS = fps_ 
 

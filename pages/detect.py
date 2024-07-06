@@ -89,7 +89,7 @@ authenticator = stauth.Authenticate(
 
 
 if st.session_state["authentication_status"]:
-    authenticator.logout("登出", location='sidebar')
+    authenticator.logout("退出登录", location='sidebar')
 elif st.session_state["authentication_status"] is None:
     st.switch_page("app.py")
 
